@@ -18,7 +18,7 @@ class TutorialCoachMarkWidget extends StatefulWidget {
     this.onClickTargetWithTapPosition,
     this.clickOverlay,
     this.alignSkip = Alignment.bottomRight,
-    this.textSkip = "SKIP",
+    this.textSkip = "PASSAR TUTORIAL",
     this.onClickSkip,
     this.colorShadow = Colors.black,
     this.opacityShadow = 0.8,
