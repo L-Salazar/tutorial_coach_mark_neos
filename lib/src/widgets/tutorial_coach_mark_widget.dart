@@ -33,6 +33,11 @@ class TutorialCoachMarkWidget extends StatefulWidget {
     this.rootOverlay = false,
     this.showSkipInLastTarget = false,
     this.imageFilter,
+    this.edgeInsetsBottomButtons,
+    this.buttonHeight,
+    this.widgetTextJumpTutorial,
+    this.widgetContinueJumpTutorial,
+    this.buttonContinueColor,
   })  : assert(targets.length > 0),
         super(key: key);
 
@@ -59,6 +64,11 @@ class TutorialCoachMarkWidget extends StatefulWidget {
   final bool rootOverlay;
   final bool showSkipInLastTarget;
   final ImageFilter? imageFilter;
+  final EdgeInsets? edgeInsetsBottomButtons;
+  final double? buttonHeight;
+  final Widget? widgetTextJumpTutorial;
+  final Widget? widgetContinueJumpTutorial;
+  final Color? buttonContinueColor;
 
   @override
   TutorialCoachMarkWidgetState createState() => TutorialCoachMarkWidgetState();
@@ -251,7 +261,60 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
       return const SizedBox.shrink();
     }
 
-    return widget.skipWidget ??
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: widget.edgeInsetsBottomButtons ?? EdgeInsets.zero,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: widget.buttonHeight,
+              child: OutlinedButton(
+                  onPressed: () {
+                    skip();
+                  },
+                  style: ButtonStyle(
+                    side: MaterialStateProperty.all(
+                      const BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(48.0)),
+                      ),
+                    ),
+                  ),
+                  child: widget.widgetTextJumpTutorial),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              height: widget.buttonHeight,
+              child: ElevatedButton(
+                  onPressed: () {
+                    next();
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      widget.buttonContinueColor,
+                    ),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(48.0)),
+                        side: BorderSide(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  child: widget.widgetContinueJumpTutorial),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    /* return widget.skipWidget ??
         Align(
           alignment: currentTarget?.alignSkip ?? widget.alignSkip,
           child: SafeArea(
@@ -274,7 +337,7 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
               ),
             ),
           ),
-        );
+        ); */
   }
 
   @override
