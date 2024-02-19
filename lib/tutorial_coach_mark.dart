@@ -36,6 +36,11 @@ class TutorialCoachMark {
   final Widget? skipWidget;
   final bool showSkipInLastTarget;
   final ImageFilter? imageFilter;
+  final EdgeInsets? edgeInsetsBottomButtons;
+  final double? buttonHeight;
+  final Widget? widgetTextJumpTutorial;
+  final Widget? widgetContinueJumpTutorial;
+  final Color? buttonContinueColor;
 
   OverlayEntry? _overlayEntry;
 
@@ -60,6 +65,11 @@ class TutorialCoachMark {
     this.skipWidget,
     this.showSkipInLastTarget = true,
     this.imageFilter,
+    this.edgeInsetsBottomButtons,
+    this.buttonHeight,
+    this.widgetTextJumpTutorial,
+    this.widgetContinueJumpTutorial,
+    this.buttonContinueColor,
   }) : assert(opacityShadow >= 0 && opacityShadow <= 1);
 
   OverlayEntry _buildOverlay({bool rootOverlay = false}) {
@@ -88,6 +98,11 @@ class TutorialCoachMark {
           rootOverlay: rootOverlay,
           showSkipInLastTarget: showSkipInLastTarget,
           imageFilter: imageFilter,
+          buttonContinueColor: buttonContinueColor,
+          buttonHeight: buttonHeight,
+          edgeInsetsBottomButtons: edgeInsetsBottomButtons,
+          widgetContinueJumpTutorial: widgetContinueJumpTutorial,
+          widgetTextJumpTutorial: widgetTextJumpTutorial,
         );
       },
     );
