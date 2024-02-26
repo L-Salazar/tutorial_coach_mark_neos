@@ -38,6 +38,10 @@ class TutorialCoachMarkWidget extends StatefulWidget {
     this.widgetTextJumpTutorial,
     this.widgetContinueJumpTutorial,
     this.buttonContinueColor,
+    this.onTapContinue,
+    this.onTapSkipTutorial,
+    this.widgetFinishTutorial,
+    this.useFinishButton = false,
   })  : assert(targets.length > 0),
         super(key: key);
 
@@ -68,7 +72,11 @@ class TutorialCoachMarkWidget extends StatefulWidget {
   final double? buttonHeight;
   final Widget? widgetTextJumpTutorial;
   final Widget? widgetContinueJumpTutorial;
+  final Widget? widgetFinishTutorial;
   final Color? buttonContinueColor;
+  final VoidCallback? onTapContinue;
+  final VoidCallback? onTapSkipTutorial;
+  final bool useFinishButton;
 
   @override
   TutorialCoachMarkWidgetState createState() => TutorialCoachMarkWidgetState();
@@ -79,6 +87,7 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
   final GlobalKey<AnimatedFocusLightState> _focusLightKey = GlobalKey();
   bool showContent = false;
   TargetFocus? currentTarget;
+  bool isLastTarget = false;
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +110,7 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
             rootOverlay: widget.rootOverlay,
             imageFilter: widget.imageFilter,
             clickTarget: (target) {
+              widget.onTapContinue?.call();
               return widget.clickTarget?.call(target);
             },
             clickTargetWithTapPosition: (target, tapDetails) {
@@ -114,6 +124,13 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
               setState(() {
                 currentTarget = target;
                 showContent = true;
+                if (widget.targets.indexOf(currentTarget!) ==
+                    widget.targets.length - 1) {
+                  setState(() {
+                    debugPrint('Ultimo target');
+                    isLastTarget = true;
+                  });
+                }
               });
             },
             removeFocus: () {
@@ -127,7 +144,9 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
             duration: const Duration(milliseconds: 300),
             child: _buildContents(),
           ),
-          _buildSkip()
+          isLastTarget && widget.useFinishButton
+              ? _buildFinishTutorial()
+              : _buildSkip(),
         ],
       ),
     );
@@ -249,6 +268,40 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
     );
   }
 
+  Widget _buildFinishTutorial() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: widget.edgeInsetsBottomButtons ?? EdgeInsets.zero,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: widget.buttonHeight,
+              child: ElevatedButton(
+                onPressed: () {
+                  next();
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    widget.buttonContinueColor,
+                  ),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(48.0)),
+                    ),
+                  ),
+                ),
+                child: widget.widgetFinishTutorial,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildSkip() {
     bool isLastTarget = false;
 
@@ -273,6 +326,7 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
               height: widget.buttonHeight,
               child: OutlinedButton(
                   onPressed: () {
+                    widget.onTapSkipTutorial?.call();
                     skip();
                   },
                   style: ButtonStyle(
@@ -294,6 +348,7 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
               height: widget.buttonHeight,
               child: ElevatedButton(
                   onPressed: () {
+                    widget.onTapContinue?.call();
                     next();
                   },
                   style: ButtonStyle(

@@ -41,6 +41,10 @@ class TutorialCoachMark {
   final Widget? widgetTextJumpTutorial;
   final Widget? widgetContinueJumpTutorial;
   final Color? buttonContinueColor;
+  final VoidCallback? onTapContinue;
+  final VoidCallback? onTapSkipTutorial;
+  final Widget? widgetFinishTutorial;
+  final bool useFinishButton;
 
   OverlayEntry? _overlayEntry;
 
@@ -70,6 +74,10 @@ class TutorialCoachMark {
     this.widgetTextJumpTutorial,
     this.widgetContinueJumpTutorial,
     this.buttonContinueColor,
+    this.onTapContinue,
+    this.onTapSkipTutorial,
+    this.widgetFinishTutorial,
+    this.useFinishButton = false,
   }) : assert(opacityShadow >= 0 && opacityShadow <= 1);
 
   OverlayEntry _buildOverlay({bool rootOverlay = false}) {
@@ -103,6 +111,10 @@ class TutorialCoachMark {
           edgeInsetsBottomButtons: edgeInsetsBottomButtons,
           widgetContinueJumpTutorial: widgetContinueJumpTutorial,
           widgetTextJumpTutorial: widgetTextJumpTutorial,
+          onTapContinue: onTapContinue,
+          onTapSkipTutorial: onTapSkipTutorial,
+          widgetFinishTutorial: widgetFinishTutorial,
+          useFinishButton: useFinishButton,
         );
       },
     );
