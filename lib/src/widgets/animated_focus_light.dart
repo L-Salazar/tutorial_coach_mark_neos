@@ -242,6 +242,23 @@ class AnimatedStaticFocusLightState extends AnimatedFocusLightState {
     return (_targetPosition?.size.height ?? 0) + _getPaddingFocus() * 4;
   }
 
+  CustomClipper<Path> _getClipper(ShapeLightFocus? shape) {
+    return shape == ShapeLightFocus.RRect
+        ? RectClipper(
+            progress: _progressAnimated,
+            offset: _getPaddingFocus(),
+            target: _targetPosition ?? TargetPosition(Size.zero, Offset.zero),
+            radius: _targetFocus.radius ?? 0,
+            borderSide: _targetFocus.borderSide,
+          )
+        : CircleClipper(
+            _progressAnimated,
+            _positioned,
+            _sizeCircle,
+            _targetFocus.borderSide,
+          );
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -254,13 +271,27 @@ class AnimatedStaticFocusLightState extends AnimatedFocusLightState {
           _progressAnimated = _curvedAnimation.value;
           return Stack(
             children: <Widget>[
-              SizedBox(
-                width: double.maxFinite,
-                height: double.maxFinite,
-                child: CustomPaint(
-                  painter: _getPainter(_targetFocus),
-                ),
-              ),
+              widget.imageFilter != null
+                  ? ClipPath(
+                      clipper: _getClipper(_targetFocus.shape),
+                      child: BackdropFilter(
+                        filter: widget.imageFilter!,
+                        child: SizedBox(
+                          width: double.maxFinite,
+                          height: double.maxFinite,
+                          child: CustomPaint(
+                            painter: _getPainter(_targetFocus),
+                          ),
+                        ),
+                      ),
+                    )
+                  : SizedBox(
+                      width: double.maxFinite,
+                      height: double.maxFinite,
+                      child: CustomPaint(
+                        painter: _getPainter(_targetFocus),
+                      ),
+                    ),
               Positioned(
                 left: left,
                 top: top,
