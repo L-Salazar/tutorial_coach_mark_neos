@@ -324,75 +324,52 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
           children: [
             SizedBox(
               height: widget.buttonHeight,
-              child: OutlinedButton(
-                  onPressed: () {
-                    widget.onTapSkipTutorial?.call();
-                    skip();
-                  },
-                  style: ButtonStyle(
-                    side: MaterialStateProperty.all(
-                      const BorderSide(
-                        color: Colors.white,
-                      ),
-                    ),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(48.0)),
-                      ),
+              child: ElevatedButton(
+                onPressed: () {
+                  widget.onTapContinue?.call();
+                  next();
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    widget.buttonContinueColor,
+                  ),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(48.0)),
+                      side: BorderSide(color: Colors.white),
                     ),
                   ),
-                  child: widget.widgetTextJumpTutorial),
+                ),
+                child: widget.widgetContinueJumpTutorial,
+              ),
             ),
             const SizedBox(height: 16),
             SizedBox(
               height: widget.buttonHeight,
-              child: ElevatedButton(
-                  onPressed: () {
-                    widget.onTapContinue?.call();
-                    next();
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      widget.buttonContinueColor,
-                    ),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(48.0)),
-                        side: BorderSide(color: Colors.white),
-                      ),
+              child: OutlinedButton(
+                onPressed: () {
+                  widget.onTapSkipTutorial?.call();
+                  skip();
+                },
+                style: ButtonStyle(
+                  side: MaterialStateProperty.all(
+                    const BorderSide(
+                      color: Colors.white,
                     ),
                   ),
-                  child: widget.widgetContinueJumpTutorial),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(48.0)),
+                    ),
+                  ),
+                ),
+                child: widget.widgetTextJumpTutorial,
+              ),
             ),
           ],
         ),
       ),
     );
-
-    /* return widget.skipWidget ??
-        Align(
-          alignment: currentTarget?.alignSkip ?? widget.alignSkip,
-          child: SafeArea(
-            child: AnimatedOpacity(
-              opacity: showContent ? 1 : 0,
-              duration: const Duration(milliseconds: 300),
-              child: InkWell(
-                onTap: skip,
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: IgnorePointer(
-                    ignoringSemantics: false,
-                    child: widget.skipWidget ??
-                        Text(
-                          widget.textSkip,
-                          style: widget.textStyleSkip,
-                        ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ); */
   }
 
   @override
